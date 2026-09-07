@@ -20,10 +20,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="lg:col-span-7 space-y-5 text-left">
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
-                <span className="text-[13px] font-semibold tracking-wider uppercase text-slate-500 block">
+                <span className="text-xs font-semibold text-slate-500 block">
                   UPI-Shield • Digital Payment Safety
                 </span>
-                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200">
+                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">
                   <Eye className="w-3 h-3 text-teal-600" />
                   <span>Includes ScamLens</span>
                 </span>
@@ -42,17 +42,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={onAnalyzeClick}
-                className="h-11 px-5 rounded-lg text-sm font-semibold text-white bg-[#0F766E] hover:bg-[#0d655e] active:bg-[#0b544e] transition-colors shadow-2xs inline-flex items-center space-x-2 cursor-pointer"
+                aria-label="Analyze a message"
+                className="ui-button ui-button-primary h-11 px-5 text-sm font-semibold inline-flex items-center space-x-2 cursor-pointer shadow-2xs"
               >
                 <span>Analyze a Message</span>
-                <ArrowDown className="w-4 h-4 text-emerald-200" />
+                <ArrowDown className="w-4 h-4 text-emerald-100" />
               </button>
 
               {onTryScamLensClick && (
                 <button
                   type="button"
                   onClick={onTryScamLensClick}
-                  className="h-11 px-5 rounded-lg text-sm font-bold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+                  className="ui-button h-11 px-4 text-sm font-semibold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
                   title="Load the 5-step electricity disconnection scam attack chain demo"
                 >
                   <Eye className="w-4 h-4 text-teal-700" />
@@ -63,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={onTryDemoClick}
-                className="h-11 px-5 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs cursor-pointer"
+                className="ui-button ui-button-secondary h-11 px-4 text-sm font-semibold text-slate-700 border border-slate-300 bg-white hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
               >
                 Try Example
               </button>
@@ -91,7 +92,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div className="flex items-center space-x-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#15803D]"></span>
-                  <span className="text-[13px] font-semibold uppercase tracking-wider text-slate-700">
+                  <span className="text-xs font-semibold text-slate-700">
                     Security Check
                   </span>
                 </div>
@@ -134,7 +135,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+              <div className="pt-2 flex items-center justify-between text-xs text-slate-500 font-medium">
                 <span>Aligned with NPCI UPI 2.0 Security Advisory</span>
                 <span>v2.4 Production</span>
               </div>

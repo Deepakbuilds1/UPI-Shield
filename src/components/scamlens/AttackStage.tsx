@@ -188,7 +188,7 @@ export const AttackStage: React.FC<AttackStageProps> = ({
     >
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center space-x-1.5">
-          <span className="w-5 h-5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[11px] flex items-center justify-center font-mono shrink-0">
+          <span className="w-5 h-5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center font-mono shrink-0">
             {index + 1}
           </span>
           <span
@@ -209,12 +209,12 @@ export const AttackStage: React.FC<AttackStageProps> = ({
         <span className="block text-xs font-bold text-[#0B1F33] tracking-tight truncate">
           {meta.short}
         </span>
-        <p className="text-[11px] text-slate-500 line-clamp-1 italic font-mono">
+        <p className="text-xs text-slate-500 line-clamp-1 italic font-mono">
           &ldquo;{stage.evidence || stage.explanation}&rdquo;
         </p>
       </div>
 
-      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 group-hover:text-slate-700">
+      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 group-hover:text-slate-700">
         <span className="font-medium">Inspect stage</span>
         <ChevronRight
           className={`w-3.5 h-3.5 transition-transform ${

@@ -71,7 +71,7 @@ export const DetectedSignalsList: React.FC<DetectedSignalsListProps> = ({ signal
             Key behavioural and contextual flags identified in the message text
           </p>
         </div>
-        <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
           Semantic Extraction
         </span>
       </div>
@@ -108,7 +108,7 @@ export const DetectedSignalsList: React.FC<DetectedSignalsListProps> = ({ signal
             </div>
 
             {signal.evidence && (
-              <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-500 flex items-baseline space-x-1">
+              <div className="pt-2 border-t border-slate-200/80 text-xs text-slate-500 flex items-baseline space-x-1">
                 <span className="font-semibold text-slate-700 shrink-0">Trigger:</span>
                 <span className="font-mono text-slate-700 bg-white px-1 py-0.5 rounded border border-slate-200 truncate">
                   "{signal.evidence}"

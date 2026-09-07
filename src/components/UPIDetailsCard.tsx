@@ -27,7 +27,7 @@ export const UPIDetailsCard: React.FC<UPIDetailsCardProps> = ({ upi }) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">
+          <span className="text-xs font-medium text-slate-500 block">
             Payee (VPA)
           </span>
           <span className="text-xs font-mono font-semibold text-[#0B1F33] truncate block mt-0.5">
@@ -36,7 +36,7 @@ export const UPIDetailsCard: React.FC<UPIDetailsCardProps> = ({ upi }) => {
         </div>
 
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">
+          <span className="text-xs font-medium text-slate-500 block">
             Payee Name
           </span>
           <span className="text-xs font-semibold text-[#0B1F33] truncate block mt-0.5">
@@ -45,7 +45,7 @@ export const UPIDetailsCard: React.FC<UPIDetailsCardProps> = ({ upi }) => {
         </div>
 
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">
+          <span className="text-xs font-medium text-slate-500 block">
             Amount & Currency
           </span>
           <span className="text-xs font-mono font-semibold text-[#0B1F33] block mt-0.5">
@@ -54,7 +54,7 @@ export const UPIDetailsCard: React.FC<UPIDetailsCardProps> = ({ upi }) => {
         </div>
 
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">
+          <span className="text-xs font-medium text-slate-500 block">
             Payment Destination
           </span>
           <span className="text-xs font-medium text-[#B45309] truncate block mt-0.5">

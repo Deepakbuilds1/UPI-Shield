@@ -7,7 +7,7 @@ export const EducationSection: React.FC = () => {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="max-w-2xl text-left space-y-2">
-          <span className="text-[13px] font-semibold uppercase tracking-wider text-slate-500 block">
+          <span className="text-xs font-semibold text-slate-500 block">
             How It Works
           </span>
           <h2 className="text-[24px] sm:text-[28px] font-bold text-[#0B1F33] tracking-tight">
@@ -18,76 +18,80 @@ export const EducationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2-Column Paradigm Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 2-Column Paradigm Comparison - Issues 10, 11 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
           {/* Card 1: Technical Authentication */}
-          <div className="rounded-xl border border-slate-200 p-6 bg-[#F8FAFC] space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-lg bg-slate-200 flex items-center justify-center text-slate-700">
-                <Lock className="w-5 h-5" />
+          <div className="h-full flex flex-col justify-between rounded-xl border border-slate-200 p-6 bg-[#F8FAFC] space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-lg bg-slate-200 flex items-center justify-center text-slate-700">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-[#0B1F33]">
+                    Authentication & Identity (MPIN / OTP)
+                  </h3>
+                  <span className="text-xs text-slate-500">Traditional Banking Security Layer</span>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-semibold text-[#0B1F33]">
-                  Authentication & Identity (MPIN / OTP)
-                </h3>
-                <span className="text-xs text-slate-500">Traditional Banking Security Layer</span>
+
+              <div className="p-3.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 min-h-16 flex flex-col justify-center">
+                <span className="font-semibold text-[#0B1F33] block mb-0.5">Security Question:</span>
+                <span className="italic text-slate-600">"Is this the legitimate device and credential holder?"</span>
               </div>
-            </div>
 
-            <div className="p-3 rounded-lg bg-white border border-slate-200 text-xs text-slate-700">
-              <span className="font-semibold text-slate-900 block mb-1">Security Question:</span>
-              <span className="italic text-slate-600">"Is this the legitimate device and credential holder?"</span>
+              <ul className="space-y-2 text-xs text-slate-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-400 font-bold">•</span>
+                  <span>Validates credential possession, but cannot assess whether the user is under coercion or false pretenses.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-400 font-bold">•</span>
+                  <span>Fails when the authorized user willingly enters their MPIN due to fear of utility disconnection or legal threats.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-400 font-bold">•</span>
+                  <span>Operates after the psychological trap has already succeeded.</span>
+                </li>
+              </ul>
             </div>
-
-            <ul className="space-y-2 text-xs text-slate-600">
-              <li className="flex items-start gap-2">
-                <span className="text-slate-400 font-bold">•</span>
-                <span>Validates credential possession, but cannot assess whether the user is under coercion or false pretenses.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-slate-400 font-bold">•</span>
-                <span>Fails when the authorized user willingly enters their MPIN due to fear of utility disconnection or legal threats.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-slate-400 font-bold">•</span>
-                <span>Operates after the psychological trap has already succeeded.</span>
-              </li>
-            </ul>
           </div>
 
           {/* Card 2: Contextual Defense */}
-          <div className="rounded-xl border border-[#0F766E]/40 p-6 bg-white space-y-4 shadow-2xs">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-lg bg-[#0F766E] flex items-center justify-center text-white">
-                <ShieldCheck className="w-5 h-5" />
+          <div className="h-full flex flex-col justify-between rounded-xl border border-[#0F766E]/40 p-6 bg-white space-y-4 shadow-2xs">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-lg bg-[#0F766E] flex items-center justify-center text-white">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-[#0B1F33]">
+                    UPI-Shield Contextual Defense
+                  </h3>
+                  <span className="text-xs text-[#0F766E] font-medium">Pre-Authorization Safety Layer</span>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-semibold text-[#0B1F33]">
-                  UPI-Shield Contextual Defense
-                </h3>
-                <span className="text-xs text-[#0F766E] font-medium">Pre-Authorization Safety Layer</span>
+
+              <div className="p-3.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs text-slate-700 min-h-16 flex flex-col justify-center">
+                <span className="font-semibold text-[#0B1F33] block mb-0.5">Security Question:</span>
+                <span className="italic text-slate-700">"Does this payment request make logical and contextual sense?"</span>
               </div>
-            </div>
 
-            <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs text-slate-700">
-              <span className="font-semibold text-[#0B1F33] block mb-1">Security Question:</span>
-              <span className="italic text-slate-700">"Does this payment request make logical and contextual sense?"</span>
+              <ul className="space-y-2 text-xs text-slate-700">
+                <li className="flex items-start gap-2">
+                  <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
+                  <span>Extracts artificial countdowns, simulated disconnection notices, and impersonated customer care claims.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
+                  <span>Identifies ₹1 or ₹2 nominal verification transfers used to establish fraudulent autopay mandates.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
+                  <span>Issues immediate plain-language advisories in English and Hindi before payment is confirmed.</span>
+                </li>
+              </ul>
             </div>
-
-            <ul className="space-y-2 text-xs text-slate-700">
-              <li className="flex items-start gap-2">
-                <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
-                <span>Extracts artificial countdowns, simulated disconnection notices, and impersonated customer care claims.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
-                <span>Identifies ₹1 or ₹2 nominal verification transfers used to establish fraudulent autopay mandates.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" />
-                <span>Issues immediate plain-language advisories in English and Hindi before payment is confirmed.</span>
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -95,7 +99,7 @@ export const EducationSection: React.FC = () => {
         <div id="safety-guide-section" className="rounded-xl border border-slate-200 p-6 bg-[#0B1F33] text-white space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700 pb-3">
             <div>
-              <span className="text-xs uppercase tracking-wider text-slate-400 block font-medium">
+              <span className="text-xs font-semibold text-slate-400 block">
                 Safety Guide
               </span>
               <h3 className="text-lg font-bold text-white mt-0.5">

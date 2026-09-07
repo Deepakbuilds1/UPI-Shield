@@ -52,40 +52,40 @@ export const TechnicalAnalysisCard: React.FC<TechnicalAnalysisCardProps> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 block">
+          <span className="text-xs font-medium text-slate-500 block">
             Semantic NLP (60%)
           </span>
           <span className="text-base font-bold text-[#0B1F33] font-mono">
             {technical.semantic_score}
             <span className="text-xs text-slate-400 font-normal"> / 60</span>
           </span>
-          <span className="text-[11px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-500 block mt-0.5">
             Language context & intent
           </span>
         </div>
 
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 block">
+          <span className="text-xs font-medium text-slate-500 block">
             Behavioral Coercion (25%)
           </span>
           <span className="text-base font-bold text-[#0B1F33] font-mono">
             {technical.behavioral_score}
             <span className="text-xs text-slate-400 font-normal"> / 25</span>
           </span>
-          <span className="text-[11px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-500 block mt-0.5">
             Threat & urgency dynamics
           </span>
         </div>
 
         <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-          <span className="text-[11px] font-medium text-slate-500 block">
+          <span className="text-xs font-medium text-slate-500 block">
             Technical Payment (15%)
           </span>
           <span className="text-base font-bold text-[#0B1F33] font-mono">
             {technical.technical_payment_score}
             <span className="text-xs text-slate-400 font-normal"> / 15</span>
           </span>
-          <span className="text-[11px] text-slate-500 block mt-0.5">
+          <span className="text-xs text-slate-500 block mt-0.5">
             VPA, URL & ₹1 trap checks
           </span>
         </div>
@@ -102,7 +102,7 @@ export const TechnicalAnalysisCard: React.FC<TechnicalAnalysisCardProps> = ({
               : 'Local Safety Heuristics Engine (Resilient Fallback)'}
           </span>
         </div>
-        <span className="font-mono text-[11px]">
+        <span className="font-mono text-xs">
           Processed at {new Date(technical.processed_at).toLocaleTimeString()}
         </span>
       </div>
@@ -119,7 +119,7 @@ export const TechnicalAnalysisCard: React.FC<TechnicalAnalysisCardProps> = ({
               <div key={idx} className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="font-medium text-slate-700">
-                    {item.label} <span className="text-[11px] text-slate-400">({item.weight})</span>
+                    {item.label} <span className="text-xs text-slate-400">({item.weight})</span>
                   </span>
                   <span className="font-mono font-semibold text-slate-900">
                     {item.value.toFixed(2)}

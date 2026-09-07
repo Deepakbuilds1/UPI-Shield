@@ -29,10 +29,10 @@ export const ManipulationScore: React.FC<ManipulationScoreProps> = ({
         <div>
           <div className="flex items-center space-x-2">
             <Gauge className="w-4 h-4 text-slate-600" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-semibold text-slate-600">
               Psychological Pressure Metric
             </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-200/80 text-slate-700">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-slate-200/80 text-slate-700">
               Contextual assessment
             </span>
           </div>
@@ -40,7 +40,7 @@ export const ManipulationScore: React.FC<ManipulationScoreProps> = ({
             <h4 className="text-base sm:text-lg font-bold text-[#0B1F33]">
               Manipulation Risk
             </h4>
-            <span className={`text-xs font-bold uppercase tracking-wide ${severity.color}`}>
+            <span className={`text-xs font-bold ${severity.color}`}>
               {severity.label}
             </span>
           </div>
@@ -49,7 +49,7 @@ export const ManipulationScore: React.FC<ManipulationScoreProps> = ({
         <div className="flex items-center space-x-4">
           {paymentRiskScore !== undefined && (
             <div className="text-right">
-              <span className="text-[10px] font-medium uppercase text-slate-500 block">
+              <span className="text-xs font-medium text-slate-500 block">
                 Payment Risk
               </span>
               <span className="text-xl font-bold font-mono text-slate-800">

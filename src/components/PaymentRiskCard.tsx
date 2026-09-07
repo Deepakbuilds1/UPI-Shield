@@ -39,12 +39,12 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {payment.amount && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-            <span className="text-[11px] font-medium text-slate-500 block">Demanded Amount</span>
+            <span className="text-xs font-medium text-slate-500 block">Demanded Amount</span>
             <span className="text-base font-bold text-[#0B1F33] font-mono">
               {payment.amount}
             </span>
             {isSmallTrap && (
-              <span className="text-[11px] font-medium text-[#B91C1C] block mt-0.5">
+              <span className="text-xs font-medium text-[#B91C1C] block mt-0.5">
                 Nominal verification fee pattern
               </span>
             )}
@@ -53,7 +53,7 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
 
         {payment.reason && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-            <span className="text-[11px] font-medium text-slate-500 block">Stated Pretext</span>
+            <span className="text-xs font-medium text-slate-500 block">Stated Pretext</span>
             <span className="text-xs font-medium text-slate-800">
               {payment.reason}
             </span>
@@ -62,7 +62,7 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
 
         {payment.method && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-            <span className="text-[11px] font-medium text-slate-500 block">Payment Method</span>
+            <span className="text-xs font-medium text-slate-500 block">Payment Method</span>
             <span className="text-xs font-medium text-slate-800">
               {payment.method}
             </span>
@@ -71,7 +71,7 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
 
         {payment.upi_id && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200 col-span-2 sm:col-span-1">
-            <span className="text-[11px] font-medium text-slate-500 block">Target VPA</span>
+            <span className="text-xs font-medium text-slate-500 block">Target VPA</span>
             <span className="text-xs font-mono font-semibold text-[#0B1F33] truncate block">
               {payment.upi_id}
             </span>
@@ -80,7 +80,7 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
 
         {payment.phone_number && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200">
-            <span className="text-[11px] font-medium text-slate-500 block">Callback / Sender Phone</span>
+            <span className="text-xs font-medium text-slate-500 block">Callback / Sender Phone</span>
             <span className="text-xs font-mono font-semibold text-slate-800 flex items-center gap-1">
               <Phone className="w-3 h-3 text-slate-400" />
               {payment.phone_number}
@@ -90,7 +90,7 @@ export const PaymentRiskCard: React.FC<PaymentRiskCardProps> = ({ payment }) => 
 
         {payment.url && (
           <div className="p-3 rounded-lg bg-[#F8FAFC] border border-slate-200 col-span-2 sm:col-span-1">
-            <span className="text-[11px] font-medium text-slate-500 block">Detected Link</span>
+            <span className="text-xs font-medium text-slate-500 block">Detected Link</span>
             <span className="text-xs font-mono text-slate-700 truncate flex items-center gap-1">
               <Link2 className="w-3 h-3 text-slate-400 shrink-0" />
               {payment.url}

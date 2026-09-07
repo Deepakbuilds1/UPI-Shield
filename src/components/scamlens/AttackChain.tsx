@@ -49,7 +49,7 @@ export const AttackChain: React.FC<AttackChainProps> = ({
             {statusSummary || `UPI-Shield detected a ${stages.length}-step social-engineering attack.`}
           </span>
         </div>
-        <span className="text-[11px] text-slate-500 italic">
+        <span className="text-xs text-slate-500 italic">
           Click any stage card below to inspect evidence
         </span>
       </div>
@@ -108,7 +108,7 @@ export const AttackChain: React.FC<AttackChainProps> = ({
                 <ActiveIcon className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                <span className="text-xs font-semibold text-slate-500 block">
                   Stage {selectedStageIndex + 1} of {stages.length} Inspector
                 </span>
                 <h4 className="text-sm sm:text-base font-bold text-[#0B1F33]">
@@ -117,14 +117,14 @@ export const AttackChain: React.FC<AttackChainProps> = ({
               </div>
             </div>
 
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700">
               Confidence: {Math.round(activeStage.confidence * 100)}%
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div className="bg-white/90 rounded-lg p-3 border border-slate-200/80">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+              <span className="text-xs font-semibold text-slate-500 block mb-1">
                 Evidence extracted from message
               </span>
               <p className="font-mono text-slate-800 bg-slate-50 p-2 rounded border border-slate-200/60 break-words">
@@ -139,7 +139,7 @@ export const AttackChain: React.FC<AttackChainProps> = ({
               <div>
                 <div className="flex items-center space-x-1.5 text-slate-700 font-bold mb-1">
                   <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
-                  <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                  <span className="text-xs font-semibold text-slate-500">
                     Why it matters
                   </span>
                 </div>
@@ -149,7 +149,7 @@ export const AttackChain: React.FC<AttackChainProps> = ({
                 </p>
               </div>
 
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <span>Tactical Severity:</span>
                 <span className="font-bold text-slate-800">{activeStage.severity}</span>
               </div>

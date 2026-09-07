@@ -56,7 +56,7 @@ export const ScamCategoryCard: React.FC<ScamCategoryCardProps> = ({
                 className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded text-xs font-medium bg-slate-50 border border-slate-200 text-slate-700"
               >
                 <span>{cat.name}</span>
-                <span className="text-[11px] font-mono text-slate-500">
+                <span className="text-xs font-mono text-slate-500">
                   ({Math.round(cat.confidence * 100)}%)
                 </span>
               </span>

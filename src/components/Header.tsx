@@ -57,20 +57,23 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-lg font-bold tracking-tight text-[#0B1F33]">
                 UPI-Shield
               </span>
-              <span className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded">
+              <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold text-slate-600 bg-slate-100 border border-slate-200 rounded">
                 Payment Security
               </span>
             </div>
           </div>
         </button>
 
-        {/* Center Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+        {/* Center Navigation - Issue 15: Clean text-only navigation */}
+        <nav
+          className="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600"
+          aria-label="Main navigation"
+        >
           <button
             type="button"
             onClick={() => handleRouteClick('home')}
             className={`transition-colors cursor-pointer ${
-              currentRoute === 'home' ? 'text-[#0B1F33] font-semibold' : 'hover:text-[#0B1F33]'
+              currentRoute === 'home' ? 'text-[#0B1F33] font-semibold' : 'hover:text-[#0F766E]'
             }`}
           >
             Threat Analyzer
@@ -78,36 +81,25 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => handleNavClick(onScrollToEducation)}
-            className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+            className="hover:text-[#0F766E] transition-colors cursor-pointer"
           >
             How It Works
           </button>
           <button
             type="button"
             onClick={() => handleNavClick(onScrollToSafetyGuide)}
-            className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+            className="hover:text-[#0F766E] transition-colors cursor-pointer"
           >
             Safety Guide
           </button>
           <button
             type="button"
-            onClick={() => handleRouteClick('onboarding')}
-            className={`hover:text-[#0B1F33] transition-colors cursor-pointer inline-flex items-center space-x-1 ${
-              currentRoute === 'onboarding' ? 'text-[#0B1F33] font-semibold' : ''
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Guide</span>
-          </button>
-          <button
-            type="button"
             onClick={() => handleRouteClick('help')}
-            className={`hover:text-red-700 transition-colors cursor-pointer inline-flex items-center space-x-1 ${
-              currentRoute === 'help' ? 'text-red-700 font-semibold' : 'text-slate-600'
+            className={`transition-colors cursor-pointer ${
+              currentRoute === 'help' ? 'text-[#0B1F33] font-semibold' : 'hover:text-[#0F766E]'
             }`}
           >
-            <LifeBuoy className="w-3.5 h-3.5 text-red-600" />
-            <span>Incident Help</span>
+            Incident Help
           </button>
           <button
             type="button"
@@ -115,19 +107,19 @@ export const Header: React.FC<HeaderProps> = ({
               handleNavClick();
               onOpenTestCases();
             }}
-            className="hover:text-[#0B1F33] transition-colors cursor-pointer inline-flex items-center space-x-1.5"
+            className="hover:text-[#0F766E] transition-colors cursor-pointer"
           >
-            <FileText className="w-3.5 h-3.5 text-slate-400" />
-            <span>Test Cases</span>
+            Test Cases
           </button>
         </nav>
 
-        {/* Action Button & Mobile Toggle */}
+        {/* Action Button & Mobile Toggle - Issue 13 & 14 */}
         <div className="flex items-center space-x-3">
           <button
             type="button"
             onClick={() => handleNavClick(onScrollToAnalyzer)}
-            className="inline-flex items-center justify-center px-4 h-10 rounded-lg text-sm font-semibold text-white bg-[#0B1F33] hover:bg-slate-800 active:bg-slate-900 transition-colors shadow-2xs cursor-pointer"
+            aria-label="Go to message analyzer"
+            className="ui-button ui-button-secondary px-4 h-10 border border-slate-300 bg-white text-[#0B1F33] hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer text-sm font-semibold"
           >
             Analyze Message
           </button>

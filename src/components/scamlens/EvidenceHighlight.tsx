@@ -48,7 +48,7 @@ export const EvidenceHighlight: React.FC<EvidenceHighlightProps> = ({
             What the sender is doing
           </h4>
         </div>
-        <span className="text-[11px] text-slate-500 font-medium">
+        <span className="text-xs text-slate-500 font-medium">
           Contextual semantic message analysis
         </span>
       </div>

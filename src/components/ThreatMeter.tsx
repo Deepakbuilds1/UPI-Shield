@@ -95,7 +95,7 @@ export const ThreatMeter: React.FC<ThreatMeterProps> = ({
 
           <div className="flex items-center space-x-3">
             <div className="text-right">
-              <span className="text-[11px] font-medium text-slate-500 block uppercase">
+              <span className="text-xs font-medium text-slate-500 block">
                 Risk Score
               </span>
               <span className="text-2xl font-bold font-mono text-[#0B1F33]">
@@ -105,7 +105,7 @@ export const ThreatMeter: React.FC<ThreatMeterProps> = ({
             </div>
             <div className="h-8 w-px bg-slate-200" />
             <div className="text-right">
-              <span className="text-[11px] font-medium text-slate-500 block uppercase">
+              <span className="text-xs font-medium text-slate-500 block">
                 Confidence
               </span>
               <span className="text-sm font-semibold font-mono text-slate-700">
@@ -118,10 +118,10 @@ export const ThreatMeter: React.FC<ThreatMeterProps> = ({
         {/* Clean Horizontal Risk Indicator (Replacing circular speedometer) */}
         <div className="space-y-2 pt-1">
           <div className="flex items-center justify-between text-xs font-semibold text-slate-600 px-0.5">
-            <span className={score < 25 ? 'text-[#15803D] font-bold' : ''}>LOW</span>
-            <span className={score >= 25 && score < 50 ? 'text-slate-700 font-bold' : ''}>MEDIUM</span>
-            <span className={score >= 50 && score < 75 ? 'text-[#B45309] font-bold' : ''}>HIGH</span>
-            <span className={score >= 75 ? 'text-[#B91C1C] font-bold' : ''}>CRITICAL</span>
+            <span className={score < 25 ? 'text-[#15803D] font-bold' : ''}>Low</span>
+            <span className={score >= 25 && score < 50 ? 'text-slate-700 font-bold' : ''}>Medium</span>
+            <span className={score >= 50 && score < 75 ? 'text-[#B45309] font-bold' : ''}>High</span>
+            <span className={score >= 75 ? 'text-[#B91C1C] font-bold' : ''}>Critical</span>
           </div>
 
           {/* Horizontal Track with subtle zone colors */}
@@ -139,7 +139,7 @@ export const ThreatMeter: React.FC<ThreatMeterProps> = ({
               style={{ left: `${pinLeft}%` }}
             >
               <div className="w-3 h-3 rounded-full bg-[#0B1F33] border-2 border-white shadow-xs" />
-              <span className="text-[11px] font-bold font-mono text-slate-800 mt-0.5">
+              <span className="text-xs font-bold font-mono text-slate-800 mt-0.5">
                 {score}
               </span>
             </div>

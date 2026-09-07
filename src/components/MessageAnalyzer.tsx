@@ -89,18 +89,18 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
           </p>
         </div>
 
-        {/* Source selector */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto">
-          <span className="text-xs font-medium text-slate-500 mr-1 hidden sm:inline">Source:</span>
+        {/* Source selector - Issues 9, 12, 16 */}
+        <div className="flex items-center flex-wrap gap-2">
+          <span className="text-xs font-medium text-slate-500 hidden sm:inline">Source:</span>
           {sources.map((src) => (
             <button
               key={src}
               type="button"
               onClick={() => setActiveSource(src)}
-              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+              className={`source-button ${
                 activeSource === src
-                  ? 'bg-[#0B1F33] text-white'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                  ? 'bg-[#0B1F33] text-white border-[#0B1F33]'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
               }`}
             >
               {src}
@@ -201,28 +201,28 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
         </div>
       )}
 
-      {/* Example Presets */}
-      <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-slate-700">
-            Select a benchmark sample:
+      {/* Example Presets - Issue 18 */}
+      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+          <span className="text-sm font-semibold text-slate-700">
+            Select a benchmark sample
           </span>
           <button
             type="button"
             onClick={onOpenTestCases}
-            className="text-xs font-medium text-[#0F766E] hover:text-[#0b544e] transition-colors cursor-pointer flex items-center space-x-1"
+            className="ui-link text-xs font-medium text-[#0F766E] hover:text-[#0b544e] flex items-center space-x-1 self-start sm:self-auto"
           >
             <span>View all 10 test cases</span>
             <FileText className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 pt-1">
           <button
             type="button"
             onClick={() => handleQuickLoad('scamlens-demo-1')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-semibold bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 transition-colors cursor-pointer flex items-center space-x-1"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 transition-colors cursor-pointer flex items-center space-x-1"
           >
             <Eye className="w-3 h-3 text-teal-600" />
             <span>Electricity Cut (5-Step)</span>
@@ -231,7 +231,7 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
             type="button"
             onClick={() => handleQuickLoad('scamlens-demo-2')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
             Fake Refund (Collect Scam)
           </button>
@@ -239,7 +239,7 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
             type="button"
             onClick={() => handleQuickLoad('scamlens-demo-3')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
             Hinglish Urgent KYC
           </button>
@@ -247,7 +247,7 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
             type="button"
             onClick={() => handleQuickLoad('scamlens-demo-4')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
             Remote-Access (AnyDesk)
           </button>
@@ -255,78 +255,72 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
             type="button"
             onClick={() => handleQuickLoad('test-9')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
             Legitimate Bank Alert
           </button>
         </div>
       </div>
 
-      {/* Main Buttons and Secondary Tools */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
-        {/* Secondary Tools */}
-        <div className="flex items-center space-x-2">
+      {/* Main Action Buttons - Issues 8, 17 */}
+      <div className="analyzer-actions flex flex-wrap items-center justify-end gap-2 pt-2">
+        <button
+          type="button"
+          onClick={onOpenScreenshot}
+          disabled={isLoading}
+          className="ui-button ui-button-secondary h-10 px-3.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+          title="Upload screenshot of SMS or chat"
+        >
+          <Upload className="w-3.5 h-3.5 text-slate-500" />
+          <span>Upload Screenshot</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onOpenUpiTool}
+          disabled={isLoading}
+          className="ui-button ui-button-secondary h-10 px-3.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+          title="Inspect UPI intent URI or QR code text"
+        >
+          <Link2 className="w-3.5 h-3.5 text-slate-500" />
+          <span>Inspect UPI Link</span>
+        </button>
+
+        {onTryScamLensDemo && (
           <button
             type="button"
-            onClick={onOpenScreenshot}
+            onClick={onTryScamLensDemo}
             disabled={isLoading}
-            className="inline-flex items-center space-x-1.5 px-3.5 h-10 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors cursor-pointer"
-            title="Upload screenshot of SMS or chat"
+            className="ui-button h-10 px-3.5 text-xs font-semibold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+            title="Load the 5-step electricity disconnection scam attack chain demo"
           >
-            <Upload className="w-3.5 h-3.5 text-slate-500" />
-            <span>Upload Screenshot</span>
+            <Eye className="w-4 h-4 text-teal-700" />
+            <span>Try ScamLens</span>
           </button>
+        )}
 
-          <button
-            type="button"
-            onClick={onOpenUpiTool}
-            disabled={isLoading}
-            className="inline-flex items-center space-x-1.5 px-3.5 h-10 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors cursor-pointer"
-            title="Inspect UPI intent URI or QR code text"
-          >
-            <Link2 className="w-3.5 h-3.5 text-slate-500" />
-            <span>Inspect UPI Link</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleRandomExample}
+          disabled={isLoading}
+          className="ui-button ui-button-secondary h-10 px-4 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs cursor-pointer"
+        >
+          Try Example
+        </button>
 
-        {/* Primary Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          {onTryScamLensDemo && (
-            <button
-              type="button"
-              onClick={onTryScamLensDemo}
-              disabled={isLoading}
-              className="px-3.5 h-11 rounded-lg text-sm font-bold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
-              title="Load the 5-step electricity disconnection scam attack chain demo"
-            >
-              <Eye className="w-4 h-4 text-teal-700" />
-              <span>Try ScamLens</span>
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={handleRandomExample}
-            disabled={isLoading}
-            className="px-4 h-11 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs cursor-pointer"
-          >
-            Try Example
-          </button>
-
-          <button
-            type="button"
-            disabled={!inputText.trim() || isLoading}
-            onClick={onAnalyze}
-            className={`px-5 h-11 rounded-lg text-sm font-semibold text-white transition-colors inline-flex items-center justify-center space-x-2 cursor-pointer ${
-              !inputText.trim() || isLoading
-                ? 'bg-slate-300 cursor-not-allowed'
-                : 'bg-[#0F766E] hover:bg-[#0d655e] active:bg-[#0b544e]'
-            }`}
-          >
-            <ShieldAlert className="w-4 h-4" />
-            <span>Analyze Message</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          disabled={!inputText.trim() || isLoading}
+          onClick={onAnalyze}
+          className={`ui-button ui-button-primary h-10 sm:h-11 px-5 text-sm font-semibold inline-flex items-center space-x-2 ${
+            !inputText.trim() || isLoading
+              ? 'opacity-50 cursor-not-allowed bg-slate-300 border-slate-300 text-slate-500'
+              : ''
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4" />
+          <span>Analyze Message</span>
+        </button>
       </div>
     </div>
   );
