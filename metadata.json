@@ -1,0 +1,6 @@
+{
+  "name": "UPI-Shield",
+  "description": "Contextual Digital Payment Scam & Coercion Detector for UPI transactions with semantic NLP analysis, threat scoring, and bilingual safety guidance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
