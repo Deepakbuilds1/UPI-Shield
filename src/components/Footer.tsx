@@ -1,154 +1,207 @@
-import React, { useState } from 'react';
-import { ShieldCheck, X } from 'lucide-react';
+import React from 'react';
+import { ShieldCheck, ExternalLink, LifeBuoy, Lock, Cookie, Eye, FileText, AlertTriangle } from 'lucide-react';
+import { AppRoute } from '../types';
 
-export const Footer: React.FC = () => {
-  const [activeModal, setActiveModal] = useState<'privacy' | 'disclaimer' | null>(null);
+interface FooterProps {
+  onNavigate: (route: AppRoute) => void;
+  onScrollToEducation?: () => void;
+  onScrollToSafetyGuide?: () => void;
+}
 
-  const handleScrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+export const Footer: React.FC<FooterProps> = ({
+  onNavigate,
+  onScrollToEducation,
+  onScrollToSafetyGuide,
+}) => {
   return (
-    <>
-      <footer className="border-t border-slate-200 bg-white text-slate-600 py-10">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            {/* Left brand info */}
-            <div className="space-y-1">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 rounded bg-[#0B1F33] text-white flex items-center justify-center">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                </div>
-                <span className="font-bold text-[#0B1F33] text-sm">
-                  UPI-Shield
-                </span>
+    <footer className="border-t border-slate-200 bg-white text-slate-600 pt-12 pb-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
+          {/* Col 1: Brand & Architecture */}
+          <div className="md:col-span-1 space-y-3">
+            <button
+              type="button"
+              onClick={() => onNavigate('home')}
+              className="flex items-center space-x-2 text-left cursor-pointer group"
+            >
+              <div className="w-7 h-7 rounded bg-[#0B1F33] text-white flex items-center justify-center transition-colors group-hover:bg-slate-800">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
               </div>
-              <p className="text-xs text-slate-500">
-                Contextual Digital Payment Scam Detection
-              </p>
-            </div>
-
-            {/* Navigation links */}
-            <nav className="flex flex-wrap items-center gap-6 text-xs font-medium text-slate-600">
-              <button
-                type="button"
-                onClick={() => handleScrollTo('education-section')}
-                className="hover:text-[#0B1F33] transition-colors cursor-pointer"
-              >
-                How It Works
-              </button>
-              <button
-                type="button"
-                onClick={() => handleScrollTo('safety-guide-section')}
-                className="hover:text-[#0B1F33] transition-colors cursor-pointer"
-              >
-                Safety Guide
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveModal('privacy')}
-                className="hover:text-[#0B1F33] transition-colors cursor-pointer"
-              >
-                Privacy
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveModal('disclaimer')}
-                className="hover:text-[#0B1F33] transition-colors cursor-pointer"
-              >
-                Disclaimer
-              </button>
-            </nav>
-          </div>
-
-          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
-            <p>
-              UPI-Shield provides an AI-assisted risk assessment and does not guarantee that a message is fraudulent or legitimate.
+              <span className="font-bold text-[#0B1F33] text-base">
+                UPI-Shield
+              </span>
+            </button>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Contextual Digital Payment Scam & Coercion Detector for UPI transactions with semantic NLP analysis, psychological threat scoring, and bilingual advisories.
             </p>
-            <p className="font-mono text-[11px] text-slate-400 shrink-0">
-              © {new Date().getFullYear()} UPI-Shield. All rights reserved.
+            <div className="pt-1">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 border border-emerald-200">
+                Privacy by Design • Zero Logs
+              </span>
+            </div>
+          </div>
+
+          {/* Col 2: Threat Verification & Tools */}
+          <div className="space-y-3 text-xs">
+            <h3 className="font-bold uppercase tracking-wider text-[#0B1F33] text-[11px]">
+              Analysis & Safety
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('home')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Payment Threat Analyzer
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('onboarding')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Quick-Start Onboarding Guide
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigate('home');
+                    setTimeout(() => onScrollToEducation?.(), 100);
+                  }}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  The Pre-Auth Security Gap
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigate('home');
+                    setTimeout(() => onScrollToSafetyGuide?.(), 100);
+                  }}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Core Rules for UPI Security
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Legal & Governance */}
+          <div className="space-y-3 text-xs">
+            <h3 className="font-bold uppercase tracking-wider text-[#0B1F33] text-[11px]">
+              Transparency & Legal
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('privacy')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer flex items-center space-x-1"
+                >
+                  <span>Privacy Policy</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('terms')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Terms of Service
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('disclaimer')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Legal & Operational Disclaimer
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('acceptable-use')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Acceptable Use Policy
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('security')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Security & Responsible Disclosure
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('cookies')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Cookie & Browser Storage Policy
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('accessibility')}
+                  className="hover:text-[#0B1F33] transition-colors cursor-pointer"
+                >
+                  Accessibility Statement
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Emergency Response & Helplines */}
+          <div className="space-y-3 text-xs">
+            <h3 className="font-bold uppercase tracking-wider text-red-700 text-[11px]">
+              Emergency Triage
+            </h3>
+            <p className="text-slate-600 leading-relaxed">
+              If you have transferred funds under a coercion pretext, report immediately to national hotlines:
             </p>
+            <div className="space-y-2">
+              <a
+                href="tel:1930"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-800 font-bold hover:bg-red-100 transition-colors"
+              >
+                <span>National Cyber Helpline: 1930</span>
+              </a>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('help')}
+                  className="font-semibold text-[#0F766E] hover:text-[#0B1F33] underline cursor-pointer block mt-1"
+                >
+                  View Step-by-Step Incident Help Center →
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </footer>
 
-      {/* Privacy Policy Modal */}
-      {activeModal === 'privacy' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6 space-y-4 shadow-lg text-left">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h4 className="text-sm font-bold text-[#0B1F33]">Privacy Policy</h4>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="p-1 rounded text-slate-400 hover:text-slate-700 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="text-xs text-slate-600 space-y-2 leading-relaxed">
-              <p>
-                UPI-Shield adheres strictly to privacy-by-design principles:
-              </p>
-              <ul className="list-disc pl-4 space-y-1">
-                <li>Messages submitted for analysis are processed ephemerally and are not permanently retained in any database.</li>
-                <li>No user bank accounts, mobile numbers, passwords, or transaction histories are stored or indexed.</li>
-                <li>Never submit private credentials such as your secret UPI PIN, OTP, or debit card CVV.</li>
-              </ul>
-            </div>
-            <div className="pt-2 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="h-9 px-4 rounded-lg text-xs font-semibold text-white bg-[#0B1F33] hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
+          <p>
+            UPI-Shield provides AI-assisted cognitive risk analysis as an informational pre-authorization guide. Always independently verify suspicious payment requests.
+          </p>
+          <p className="font-mono text-[11px] text-slate-400 shrink-0">
+            © {new Date().getFullYear()} UPI-Shield. All rights reserved.
+          </p>
         </div>
-      )}
-
-      {/* Disclaimer Modal */}
-      {activeModal === 'disclaimer' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6 space-y-4 shadow-lg text-left">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h4 className="text-sm font-bold text-[#0B1F33]">Legal & Operational Disclaimer</h4>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="p-1 rounded text-slate-400 hover:text-slate-700 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="text-xs text-slate-600 space-y-2 leading-relaxed">
-              <p>
-                UPI-Shield provides contextual cognitive analysis as an informational pre-authorization aid.
-              </p>
-              <p>
-                Risk scores and warnings are generated via algorithmic natural language heuristics and multimodal AI models. They do not constitute official financial, legal, or banking certifications.
-              </p>
-              <p>
-                Always independently verify any request involving funds, bank accounts, or credentials through verified official telephone lines or authorized physical branches.
-              </p>
-            </div>
-            <div className="pt-2 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="h-9 px-4 rounded-lg text-xs font-semibold text-white bg-[#0B1F33] hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      </div>
+    </footer>
   );
 };

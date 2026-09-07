@@ -97,3 +97,22 @@ export interface DemoTestCase {
   text: string;
   description: string;
 }
+
+export type AppRoute =
+  | 'home'
+  | 'help'
+  | 'privacy'
+  | 'terms'
+  | 'disclaimer'
+  | 'acceptable-use'
+  | 'security'
+  | 'cookies'
+  | 'accessibility'
+  | 'onboarding'
+  | 'not-found';
+
+export interface ToastMessage {
+  id: string;
+  type: 'success' | 'info' | 'warning' | 'error';
+  message: string;
+}

@@ -140,27 +140,45 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
         </div>
       </div>
 
-      {/* Loading Progress State (Disciplined & Professional) */}
+      {/* Loading Progress State (Disciplined & Professional with Accessibility) */}
       {isLoading && (
-        <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+        <div
+          role="status"
+          aria-live="polite"
+          className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2"
+        >
           <div className="flex items-center space-x-2 text-sm font-semibold text-[#0B1F33]">
             <Loader2 className="w-4 h-4 animate-spin text-[#0F766E]" />
-            <span>Analyzing message...</span>
+            <span>Analyzing message context & psychological triggers...</span>
           </div>
           <div className="text-xs text-slate-600 space-y-1 pl-6">
             <div className="flex items-center space-x-2">
               <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Checking message context</span>
+              <span>Verifying conversational context & timeline urgency</span>
             </div>
             <div className="flex items-center space-x-2">
               <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Checking social-engineering signals</span>
+              <span>Scanning authority impersonation and coercion markers</span>
             </div>
             <div className="flex items-center space-x-2">
               <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Checking payment indicators</span>
+              <span>Checking payment amounts & UPI payee coordinate validity</span>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Empty State Help when text is cleared */}
+      {!inputText.trim() && !isLoading && (
+        <div className="p-3 bg-slate-50/70 rounded-lg border border-dashed border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+          <span>Input box is empty. Paste a message, upload a screenshot, or click below to load a sample.</span>
+          <button
+            type="button"
+            onClick={() => handleQuickLoad('electricity')}
+            className="font-semibold text-[#0F766E] hover:underline cursor-pointer ml-2 shrink-0"
+          >
+            Load electricity sample
+          </button>
         </div>
       )}
 
