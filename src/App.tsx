@@ -33,7 +33,8 @@ import { IncidentHelpCenterPage } from './components/pages/IncidentHelpCenterPag
 import { OnboardingGuidePage } from './components/pages/OnboardingGuidePage';
 import { NotFoundPage } from './components/pages/NotFoundPage';
 
-import { DEMO_MESSAGES } from './data/demoMessages';
+import { DEMO_MESSAGES, HACKATHON_DEMO } from './data/demoMessages';
+import { ScamLens } from './components/scamlens';
 import { AnalysisResponse, DemoTestCase, AppRoute, ToastMessage } from './types';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -254,6 +255,19 @@ export default function App() {
     addToast(`Loaded demo: ${randomScam.title}`, 'info');
   };
 
+  const handleTryScamLens = () => {
+    if (currentRoute !== 'home') {
+      navigateTo('home');
+    }
+    setInputText(HACKATHON_DEMO.text);
+    handleAnalyze(HACKATHON_DEMO.text);
+    addToast('Loaded ScamLens demo: 5-step electricity disconnection attack', 'info');
+    setTimeout(() => {
+      const el = document.getElementById('scamlens-section') || document.getElementById('results-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 400);
+  };
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-[#F8FAFC] text-[#0B1F33] flex flex-col font-sans selection:bg-slate-200">
@@ -345,6 +359,7 @@ export default function App() {
             <HeroSection
               onAnalyzeClick={handleScrollToAnalyzer}
               onTryDemoClick={handleTryDemoScam}
+              onTryScamLensClick={handleTryScamLens}
             />
 
             {/* Main Workspace */}
@@ -360,6 +375,7 @@ export default function App() {
                 onOpenScreenshot={() => setIsScreenshotOpen(true)}
                 onOpenUpiTool={() => setIsUpiModalOpen(true)}
                 onOpenTestCases={() => setIsTestCasesOpen(true)}
+                onTryScamLensDemo={handleTryScamLens}
               />
 
               {/* Error Notification with Enhanced Actionable Recovery */}
@@ -428,7 +444,18 @@ export default function App() {
                     confidence={analysisResult.confidence}
                   />
 
-                  {/* 2. Primary Result Card */}
+                  {/* 2. ScamLens: Signature Social-Engineering Attack Chain & Manipulation Analysis */}
+                  {analysisResult.scam_lens && (
+                    <ScamLens
+                      data={analysisResult.scam_lens}
+                      originalText={inputText}
+                      riskLevel={analysisResult.risk_level}
+                      riskScore={analysisResult.risk_score}
+                      detectedLanguage={analysisResult.language}
+                    />
+                  )}
+
+                  {/* 3. Primary Result Card */}
                   <ScamCategoryCard
                     categories={analysisResult.categories}
                     riskLevel={analysisResult.risk_level}

@@ -8,8 +8,10 @@ import {
   Globe,
   Loader2,
   FileText,
+  Eye,
+  Sparkles,
 } from 'lucide-react';
-import { DEMO_MESSAGES } from '../data/demoMessages';
+import { DEMO_MESSAGES, HACKATHON_DEMO, SCAMLENS_DEMOS } from '../data/demoMessages';
 
 interface MessageAnalyzerProps {
   inputText: string;
@@ -21,6 +23,7 @@ interface MessageAnalyzerProps {
   onOpenScreenshot: () => void;
   onOpenUpiTool: () => void;
   onOpenTestCases: () => void;
+  onTryScamLensDemo?: () => void;
 }
 
 export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
@@ -33,15 +36,31 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
   onOpenScreenshot,
   onOpenUpiTool,
   onOpenTestCases,
+  onTryScamLensDemo,
 }) => {
   const [activeSource, setActiveSource] = useState<'SMS' | 'WhatsApp' | 'Email' | 'Payment Note' | 'UPI Request'>('SMS');
 
   const sources = ['SMS', 'WhatsApp', 'Email', 'Payment Note', 'UPI Request'] as const;
 
-  const handleQuickLoad = (id: string) => {
-    const found = DEMO_MESSAGES.find((m) => m.id === id);
+  const handleQuickLoad = (query: string) => {
+    // Check SCAMLENS_DEMOS first
+    const scDemo = SCAMLENS_DEMOS.find((d) => d.id === query || d.title.toLowerCase().includes(query.toLowerCase()));
+    if (scDemo) {
+      setInputText(scDemo.text);
+      return;
+    }
+
+    // Check general test cases
+    const found = DEMO_MESSAGES.find(
+      (m) =>
+        m.id === query ||
+        m.id.toLowerCase().includes(query.toLowerCase()) ||
+        m.title.toLowerCase().includes(query.toLowerCase())
+    );
     if (found) {
       setInputText(found.text);
+    } else if (query === 'electricity') {
+      setInputText(HACKATHON_DEMO.text);
     }
   };
 
@@ -198,26 +217,27 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            onClick={() => handleQuickLoad('electricity')}
+            onClick={() => handleQuickLoad('scamlens-demo-1')}
             disabled={isLoading}
-            className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded text-xs font-semibold bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-800 transition-colors cursor-pointer flex items-center space-x-1"
           >
-            Electricity Disconnection
+            <Eye className="w-3 h-3 text-teal-600" />
+            <span>Electricity Cut (5-Step)</span>
           </button>
           <button
             type="button"
-            onClick={() => handleQuickLoad('refund')}
+            onClick={() => handleQuickLoad('scamlens-demo-2')}
             disabled={isLoading}
             className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
-            ₹1 Verification Trap
+            Fake Refund (Collect Scam)
           </button>
           <button
             type="button"
-            onClick={() => handleQuickLoad('hinglish-kyc')}
+            onClick={() => handleQuickLoad('scamlens-demo-3')}
             disabled={isLoading}
             className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
@@ -225,15 +245,15 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => handleQuickLoad('remote-access')}
+            onClick={() => handleQuickLoad('scamlens-demo-4')}
             disabled={isLoading}
             className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
-            Screen-Sharing Scam
+            Remote-Access (AnyDesk)
           </button>
           <button
             type="button"
-            onClick={() => handleQuickLoad('legitimate')}
+            onClick={() => handleQuickLoad('test-9')}
             disabled={isLoading}
             className="px-2.5 py-1 rounded text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition-colors cursor-pointer"
           >
@@ -270,12 +290,25 @@ export const MessageAnalyzer: React.FC<MessageAnalyzerProps> = ({
         </div>
 
         {/* Primary Action Buttons */}
-        <div className="flex items-center space-x-2.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          {onTryScamLensDemo && (
+            <button
+              type="button"
+              onClick={onTryScamLensDemo}
+              disabled={isLoading}
+              className="px-3.5 h-11 rounded-lg text-sm font-bold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+              title="Load the 5-step electricity disconnection scam attack chain demo"
+            >
+              <Eye className="w-4 h-4 text-teal-700" />
+              <span>Try ScamLens</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handleRandomExample}
             disabled={isLoading}
-            className="px-4 h-11 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors cursor-pointer"
+            className="px-4 h-11 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition-colors shadow-2xs cursor-pointer"
           >
             Try Example
           </button>

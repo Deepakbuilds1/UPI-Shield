@@ -4,11 +4,13 @@ import { ArrowDown, CheckCircle2, ShieldCheck, Lock, Activity, Eye } from 'lucid
 interface HeroSectionProps {
   onAnalyzeClick: () => void;
   onTryDemoClick: () => void;
+  onTryScamLensClick?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onAnalyzeClick,
   onTryDemoClick,
+  onTryScamLensClick,
 }) => {
   return (
     <section className="border-b border-slate-200 bg-white py-10 sm:py-14">
@@ -17,17 +19,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Left Column: Product Narrative */}
           <div className="lg:col-span-7 space-y-5 text-left">
             <div className="space-y-1">
-              <span className="text-[13px] font-semibold tracking-wider uppercase text-slate-500 block">
-                UPI-Shield • Digital Payment Safety
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className="text-[13px] font-semibold tracking-wider uppercase text-slate-500 block">
+                  UPI-Shield • Digital Payment Safety
+                </span>
+                <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200">
+                  <Eye className="w-3 h-3 text-teal-600" />
+                  <span>Includes ScamLens</span>
+                </span>
+              </div>
               <h1 className="text-[32px] sm:text-[38px] leading-[1.2] font-bold text-[#0B1F33] tracking-tight">
                 Think Before You Pay.
               </h1>
             </div>
 
             <p className="text-[15px] sm:text-[16px] leading-relaxed text-slate-600 max-w-xl">
-              Analyze suspicious payment messages for urgency, impersonation, coercion and
-              social-engineering signals before you authorize a transaction.
+              Analyze suspicious payment messages for urgency, impersonation, coercion, and
+              social-engineering attack chains before you authorize a transaction.
             </p>
 
             <div className="pt-1 flex flex-wrap items-center gap-3">
@@ -39,6 +47,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <span>Analyze a Message</span>
                 <ArrowDown className="w-4 h-4 text-emerald-200" />
               </button>
+
+              {onTryScamLensClick && (
+                <button
+                  type="button"
+                  onClick={onTryScamLensClick}
+                  className="h-11 px-5 rounded-lg text-sm font-bold text-[#0F766E] bg-teal-50 hover:bg-teal-100 border border-teal-300 transition-colors shadow-2xs inline-flex items-center space-x-1.5 cursor-pointer"
+                  title="Load the 5-step electricity disconnection scam attack chain demo"
+                >
+                  <Eye className="w-4 h-4 text-teal-700" />
+                  <span>Try ScamLens</span>
+                </button>
+              )}
 
               <button
                 type="button"

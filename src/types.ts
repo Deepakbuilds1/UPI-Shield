@@ -59,6 +59,45 @@ export interface UpiIntentDetails {
   safety_advisory: string;
 }
 
+export type ManipulationStageType =
+  | 'AUTHORITY'
+  | 'FEAR'
+  | 'URGENCY'
+  | 'REWARD'
+  | 'ISOLATION'
+  | 'DECEPTION'
+  | 'PAYMENT_PRESSURE'
+  | 'CREDENTIAL_PRESSURE'
+  | 'TRUST_BUILDING'
+  | 'CONSEQUENCE_THREAT'
+  | 'REMOTE_ACCESS_REQUEST';
+
+export interface AttackStage {
+  stage: ManipulationStageType | string;
+  stage_label?: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  confidence: number;
+  evidence: string;
+  explanation: string;
+  why_it_matters?: string;
+}
+
+export interface SemanticHighlight {
+  text: string;
+  label: string;
+  stage: string;
+}
+
+export interface ScamLensData {
+  manipulation_score: number; // 0 to 100
+  attack_chain: AttackStage[];
+  likely_objective: string;
+  safest_pause_point: string;
+  hindi_explanation?: string;
+  highlights?: SemanticHighlight[];
+  status_summary?: string;
+}
+
 export interface AnalysisResponse {
   risk_score: number; // 0 to 100
   risk_level: RiskLevel;
@@ -75,6 +114,7 @@ export interface AnalysisResponse {
     english: string;
     hindi: string;
   };
+  scam_lens?: ScamLensData | null;
   technical_analysis: {
     semantic_score: number;
     behavioral_score: number;

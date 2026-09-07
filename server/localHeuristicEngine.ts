@@ -5,6 +5,9 @@ import {
   ScamCategory,
   SignalBreakdown,
   PaymentDetails,
+  ScamLensData,
+  AttackStage,
+  SemanticHighlight,
 } from '../src/types';
 import { parseUpiString } from './upiParser';
 
@@ -103,6 +106,360 @@ export function extractPaymentDetails(text: string): PaymentDetails {
     is_verification_small_amount,
     risk_level,
     explanation,
+  };
+}
+
+export function generateScamLens(
+  text: string,
+  breakdown: SignalBreakdown,
+  riskScore: number,
+  payment: PaymentDetails,
+  lang: string
+): ScamLensData {
+  const lower = text.toLowerCase();
+
+  // False positive check: Standard legitimate notifications without coercive pressure
+  const isClearlyLegitimate =
+    (riskScore < 25 && breakdown.fear < 0.2 && breakdown.urgency < 0.25 && !payment.is_verification_small_amount) ||
+    (/official website|authorized counters|due on|bescom\.karnataka\.gov\.in|bank\.com/i.test(text) &&
+      breakdown.fear < 0.15 &&
+      breakdown.urgency < 0.2 &&
+      !payment.is_verification_small_amount);
+
+  if (isClearlyLegitimate) {
+    return {
+      manipulation_score: Math.min(12, Math.max(0, Math.round(riskScore * 0.35))),
+      attack_chain: [],
+      likely_objective: 'Standard informational notice or official account notification.',
+      safest_pause_point: 'Verify payment details through your official banking portal or provider website.',
+      hindi_explanation: 'इस संदेश में कोई मनोवैज्ञानिक हेरफेर या धोखाधड़ी का दबाव नहीं पाया गया। यह एक सामान्य सूचना प्रतीत होती है।',
+      highlights: [],
+      status_summary: 'No psychological manipulation attack chain detected.',
+    };
+  }
+
+  interface DetectedCandidate {
+    stage: string;
+    stage_label: string;
+    severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    confidence: number;
+    evidence: string;
+    explanation: string;
+    why_it_matters: string;
+    highlight_label: string;
+    index: number;
+  }
+
+  const candidates: DetectedCandidate[] = [];
+
+  // 1. AUTHORITY
+  const authorityMatch =
+    text.match(/(?:electricity\s*(?:board|department|connection)|discom|bescom|tneb|mseb|sbi|hdfc|icici|axis|rbi|cyber\s*cell|police\s*department|customer\s*care|officer|manager|adhikari|helpline)/i);
+  if (authorityMatch && authorityMatch.index !== undefined) {
+    candidates.push({
+      stage: 'AUTHORITY',
+      stage_label: 'Authority Impersonation',
+      severity: breakdown.authority_impersonation > 0.6 ? 'HIGH' : 'MEDIUM',
+      confidence: 0.92,
+      evidence: authorityMatch[0],
+      explanation: 'The sender uses an official-looking corporate or departmental identity to establish false credibility.',
+      why_it_matters: 'Establishing false authority creates artificial trust and makes recipients reluctant to question instructions.',
+      highlight_label: 'AUTHORITY / INSTITUTION',
+      index: authorityMatch.index,
+    });
+  }
+
+  // 2. FEAR
+  const fearMatch =
+    text.match(/(?:will\s*be\s*disconnected|disconnected|cut\s*off|suspended|terminate|account\s*(?:will\s*be\s*)?block|blocked|bijli\s*kat|light\s*kat|band\s*ho\s*jayega|legal\s*action|police\s*report|fir|penalty)/i);
+  if (fearMatch && fearMatch.index !== undefined) {
+    candidates.push({
+      stage: 'FEAR',
+      stage_label: 'Fear / Threat',
+      severity: breakdown.fear > 0.6 ? 'HIGH' : 'MEDIUM',
+      confidence: 0.94,
+      evidence: fearMatch[0],
+      explanation: 'Threatens service termination, account freeze, or legal penalties to induce anxiety and compliance.',
+      why_it_matters: 'Inducing fear triggers an instinctual panic response, overriding logical skepticism.',
+      highlight_label: 'FEAR / THREAT',
+      index: fearMatch.index,
+    });
+  }
+
+  // 3. URGENCY
+  const urgencyMatch =
+    text.match(/(?:within\s*\d+\s*(?:minutes?|mins?|hours?|hrs?)|immediately|urgent|today|now|turant|abhi|jald\s*se\s*jald|without\s*delay|do\s*not\s*delay|expires?\s*today)/i);
+  if (urgencyMatch && urgencyMatch.index !== undefined) {
+    candidates.push({
+      stage: 'URGENCY',
+      stage_label: 'Artificial Urgency',
+      severity: breakdown.urgency > 0.6 ? 'HIGH' : 'MEDIUM',
+      confidence: 0.95,
+      evidence: urgencyMatch[0],
+      explanation: 'Imposes an artificial deadline to force hasty action before the recipient can verify independently.',
+      why_it_matters: 'Pressure to act quickly reduces the time available to independently verify the request.',
+      highlight_label: 'ARTIFICIAL URGENCY',
+      index: urgencyMatch.index,
+    });
+  }
+
+  // 4. REWARD / FINANCIAL BAIT
+  const rewardMatch =
+    text.match(/(?:refund\s*of\s*(?:₹|rs\.?|inr)?\s*[\d,]+|cashback|bonus|won\s*(?:₹|rs\.?|inr)?\s*[\d,]+|lottery|lucky\s*draw|congratulations|inaam|jeeta\s*hai|crorepati)/i);
+  if (rewardMatch && rewardMatch.index !== undefined) {
+    candidates.push({
+      stage: 'REWARD',
+      stage_label: 'Financial Bait / Reward',
+      severity: 'HIGH',
+      confidence: 0.91,
+      evidence: rewardMatch[0],
+      explanation: 'Dangles an unearned financial reward or refund to excite the recipient and lower vigilance.',
+      why_it_matters: 'Excitement over unexpected money lowers psychological defenses and encourages compliance.',
+      highlight_label: 'FINANCIAL BAIT',
+      index: rewardMatch.index,
+    });
+  }
+
+  // 5. ISOLATION
+  const isolationMatch =
+    text.match(/(?:do\s*not\s*call\s*customer\s*care|don't\s*call\s*customer\s*care|keep\s*this\s*confidential|do\s*not\s*tell\s*anyone|do\s*not\s*contact\s*branch|kisi\s*ko\s*mat\s*batao|call\s*this\s*number\s*only)/i);
+  if (isolationMatch && isolationMatch.index !== undefined) {
+    candidates.push({
+      stage: 'ISOLATION',
+      stage_label: 'Victim Isolation',
+      severity: 'HIGH',
+      confidence: 0.96,
+      evidence: isolationMatch[0],
+      explanation: 'Explicitly discourages contacting official helpline numbers to cut off independent verification channels.',
+      why_it_matters: 'Preventing independent verification keeps the victim trapped in the scammer’s fabricated reality.',
+      highlight_label: 'VICTIM ISOLATION',
+      index: isolationMatch.index,
+    });
+  }
+
+  // 6. DECEPTION & PRETEXT
+  const deceptionMatch =
+    text.match(/(?:verification\s*payment|verification\s*fee|kyc\s*update|system\s*update|server\s*error|pending\s*approval|fix\s*your\s*wallet|auto-refund\s*verification|reactivate\s*account)/i);
+  if (deceptionMatch && deceptionMatch.index !== undefined) {
+    candidates.push({
+      stage: 'DECEPTION',
+      stage_label: 'Deception & Pretext',
+      severity: 'HIGH',
+      confidence: 0.9,
+      evidence: deceptionMatch[0],
+      explanation: 'Fabricates a plausible administrative or technical pretext to rationalize why money or action is needed.',
+      why_it_matters: 'A convincing story provides an apparent rational excuse for an irregular payment request.',
+      highlight_label: 'DECEPTION / PRETEXT',
+      index: deceptionMatch.index,
+    });
+  }
+
+  // 7. PAYMENT PRESSURE
+  const paymentMatch =
+    text.match(/(?:pay\s*(?:₹|rs\.?|inr)?\s*[\d,]+|complete\s*(?:a\s*)?(?:₹|rs\.?|inr)?\s*[\d,]+|approve\s*(?:the\s*)?upi\s*collect|bhugtan\s*karo|transfer\s*now|pay\s*immediately|clear\s*dues)/i);
+  if (paymentMatch && paymentMatch.index !== undefined) {
+    candidates.push({
+      stage: 'PAYMENT_PRESSURE',
+      stage_label: 'Payment Pressure',
+      severity: payment.is_verification_small_amount ? 'CRITICAL' : 'HIGH',
+      confidence: 0.96,
+      evidence: paymentMatch[0],
+      explanation: 'Directly urges the recipient to make an immediate digital payment transfer under manufactured pressure.',
+      why_it_matters: 'Directs psychological coercion toward an irreversible digital money transfer.',
+      highlight_label: 'PAYMENT PRETEXT',
+      index: paymentMatch.index,
+    });
+  }
+
+  // 8. CREDENTIAL PRESSURE
+  const credentialMatch =
+    text.match(/(?:otp|mpin|upi\s*pin|atm\s*pin|cvv|password|passcode|6-digit\s*code|pin\s*batao|pin\s*daalo|enter\s*pin)/i);
+  if (credentialMatch && credentialMatch.index !== undefined) {
+    candidates.push({
+      stage: 'CREDENTIAL_PRESSURE',
+      stage_label: 'Credential Pressure',
+      severity: 'CRITICAL',
+      confidence: 0.98,
+      evidence: credentialMatch[0],
+      explanation: 'Demands confidential security codes or authorization PINs that grant total control over your funds.',
+      why_it_matters: 'Compromising authorization PINs or OTPs enables direct, unauthorized account draining.',
+      highlight_label: 'CREDENTIAL PRESSURE',
+      index: credentialMatch.index,
+    });
+  }
+
+  // 9. TRUST BUILDING
+  const trustMatch =
+    text.match(/(?:dear\s*customer|dear\s*valued\s*customer|our\s*executive\s*will\s*assist|to\s*protect\s*your\s*(?:account|funds)|kindly\s*note|official\s*support)/i);
+  if (trustMatch && trustMatch.index !== undefined) {
+    candidates.push({
+      stage: 'TRUST_BUILDING',
+      stage_label: 'Trust Building',
+      severity: 'LOW',
+      confidence: 0.85,
+      evidence: trustMatch[0],
+      explanation: 'Uses polite, professional phrasing to disarm skepticism and make the interaction seem normal.',
+      why_it_matters: 'Simulating professional courtesy disarms initial suspicion before introducing the trap.',
+      highlight_label: 'TRUST BUILDING',
+      index: trustMatch.index,
+    });
+  }
+
+  // 10. CONSEQUENCE THREAT
+  const consequenceMatch =
+    text.match(/(?:permanently\s*block|account\s*permanently|court\s*case|arrest\s*warrant|fine\s*lagega|heavy\s*penalty|legal\s*proceedings)/i);
+  if (consequenceMatch && consequenceMatch.index !== undefined) {
+    candidates.push({
+      stage: 'CONSEQUENCE_THREAT',
+      stage_label: 'Consequence Threat',
+      severity: 'HIGH',
+      confidence: 0.93,
+      evidence: consequenceMatch[0],
+      explanation: 'Escalates threats to severe legal or permanent financial deprivation to crush hesitation.',
+      why_it_matters: 'Threatening severe compounding penalties compels victims to comply immediately.',
+      highlight_label: 'CONSEQUENCE THREAT',
+      index: consequenceMatch.index,
+    });
+  }
+
+  // 11. REMOTE ACCESS REQUEST
+  const remoteMatch =
+    text.match(/(?:anydesk|teamviewer|quicksupport|rustdesk|screen\s*share|share\s*(?:the\s*)?9-digit\s*code)/i);
+  if (remoteMatch && remoteMatch.index !== undefined) {
+    candidates.push({
+      stage: 'REMOTE_ACCESS_REQUEST',
+      stage_label: 'Remote Device Access',
+      severity: 'CRITICAL',
+      confidence: 0.99,
+      evidence: remoteMatch[0],
+      explanation: 'Instructs installation of remote desktop management software giving full screen and control access to the attacker.',
+      why_it_matters: 'Remote screen-sharing software gives attackers full visual access and device control.',
+      highlight_label: 'REMOTE ACCESS REQUEST',
+      index: remoteMatch.index,
+    });
+  }
+
+  // Sort candidates by order of appearance in the message text
+  candidates.sort((a, b) => a.index - b.index);
+
+  // Deduplicate stages
+  const seenStages = new Set<string>();
+  const attackChain: AttackStage[] = [];
+  const highlights: SemanticHighlight[] = [];
+
+  for (const c of candidates) {
+    if (!seenStages.has(c.stage)) {
+      seenStages.add(c.stage);
+      attackChain.push({
+        stage: c.stage,
+        stage_label: c.stage_label,
+        severity: c.severity,
+        confidence: c.confidence,
+        evidence: c.evidence,
+        explanation: c.explanation,
+        why_it_matters: c.why_it_matters,
+      });
+
+      highlights.push({
+        text: c.evidence,
+        label: c.highlight_label,
+        stage: c.stage,
+      });
+    }
+  }
+
+  // Calculate Manipulation Score (0 - 100)
+  // Reflects psychological coercion strength
+  let manipulationScore = 0;
+  if (attackChain.length > 0) {
+    const stageWeightMap: Record<string, number> = {
+      AUTHORITY: 16,
+      FEAR: 22,
+      URGENCY: 20,
+      ISOLATION: 20,
+      PAYMENT_PRESSURE: 22,
+      CREDENTIAL_PRESSURE: 26,
+      REMOTE_ACCESS_REQUEST: 28,
+      CONSEQUENCE_THREAT: 18,
+      REWARD: 16,
+      DECEPTION: 15,
+      TRUST_BUILDING: 10,
+    };
+
+    let rawScore = attackChain.reduce((sum, s) => sum + (stageWeightMap[s.stage] || 12), 0);
+
+    // Multi-stage attack chain multiplier: Combining Authority + Fear + Urgency + Payment is devastatingly effective
+    if (attackChain.length >= 4) {
+      rawScore = Math.max(rawScore, 92);
+    }
+    if (attackChain.length >= 5) {
+      rawScore = Math.max(rawScore, 96);
+    }
+    if (seenStages.has('ISOLATION') && seenStages.has('FEAR')) {
+      rawScore = Math.max(rawScore, 95);
+    }
+    if (seenStages.has('CREDENTIAL_PRESSURE') || seenStages.has('REMOTE_ACCESS_REQUEST')) {
+      rawScore = Math.max(rawScore, 98);
+    }
+
+    manipulationScore = Math.min(100, Math.max(30, rawScore));
+  } else {
+    manipulationScore = Math.min(25, Math.round(riskScore * 0.4));
+  }
+
+  // Determine Likely Objective
+  let likelyObjective = 'Make you authorize a payment before independently verifying.';
+  if (seenStages.has('CREDENTIAL_PRESSURE')) {
+    likelyObjective = 'Obtain your OTP or UPI PIN to drain funds directly from your linked bank account.';
+  } else if (seenStages.has('REMOTE_ACCESS_REQUEST')) {
+    likelyObjective = 'Make you install remote-access software so the attacker can control your phone and view banking screens.';
+  } else if (payment.is_verification_small_amount) {
+    likelyObjective = 'Trick you into authorizing a nominal payment to capture your UPI account credentials or register an auto-debit mandate.';
+  } else if (seenStages.has('REWARD')) {
+    likelyObjective = 'Make you approve a fraudulent incoming UPI collect debit request disguised as an incoming refund.';
+  } else if (seenStages.has('ISOLATION')) {
+    likelyObjective = 'Make you authorize a payment while preventing you from independently verifying the request with customer care.';
+  }
+
+  // Determine Safest Pause Point
+  let safestPausePoint = 'The safest point to stop is before making the requested payment.';
+  if (seenStages.has('REMOTE_ACCESS_REQUEST')) {
+    safestPausePoint = 'The safest point to stop is before installing remote-access software or sharing the 9-digit session code.';
+  } else if (seenStages.has('CREDENTIAL_PRESSURE')) {
+    safestPausePoint = 'The safest point to stop is before sharing the OTP or entering your secret UPI PIN.';
+  } else if (/electricity|disconnection|bijli/i.test(lower)) {
+    safestPausePoint = 'Stop before making the payment and verify the request through the official electricity provider.';
+  } else if (payment.is_verification_small_amount) {
+    safestPausePoint = 'Stop before making the nominal verification payment — official institutions never charge a fee to verify accounts.';
+  } else if (seenStages.has('REWARD')) {
+    safestPausePoint = 'Stop before approving any collect request — remember that receiving money never requires entering a UPI PIN.';
+  }
+
+  // Bilingual Hindi Explanation
+  let hindiExplanation = 'यह संदेश आपको तुरंत भुगतान करने के लिए दबाव बनाता है और अनधिकृत वित्तीय लेनदेन कराने का प्रयास करता है।';
+  if (/electricity|bijli/i.test(lower)) {
+    hindiExplanation = 'यह संदेश आधिकारिक बिजली विभाग का नाम लेकर कनेक्शन काटने का डर दिखाता है, तुरंत भुगतान का दबाव बनाता है और आपको आधिकारिक सहायता से संपर्क करने से रोकता है।';
+  } else if (/kyc|bank|account.*block/i.test(lower)) {
+    hindiExplanation = 'यह संदेश बैंक खाता बंद होने की धमकी देकर घबराहट पैदा करता है और फर्जी वेरिफिकेशन लिंक के माध्यम से तुरंत भुगतान या गोपनीय जानकारी की मांग करता है।';
+  } else if (seenStages.has('REMOTE_ACCESS_REQUEST')) {
+    hindiExplanation = 'यह संदेश सहायता के बहाने रिमोट-एक्सेस ऐप इंस्टॉल करवाकर आपके फोन और बैंक खाते का पूरा नियंत्रण हासिल करने की कोशिश कर रहा है।';
+  } else if (seenStages.has('REWARD')) {
+    hindiExplanation = 'यह संदेश फर्जी रिफंड या लॉटरी का लालच देकर आपसे यूपीआई कलेक्ट रिक्वेस्ट अप्रूव कराने की चाल चल रहा है।';
+  }
+
+  const statusSummary =
+    attackChain.length > 0
+      ? `UPI-Shield detected a ${attackChain.length}-step social-engineering attack.`
+      : 'No coercive social-engineering chain detected.';
+
+  return {
+    manipulation_score: manipulationScore,
+    attack_chain: attackChain,
+    likely_objective: likelyObjective,
+    safest_pause_point: safestPausePoint,
+    hindi_explanation: hindiExplanation,
+    highlights,
+    status_summary: statusSummary,
   };
 }
 
@@ -473,6 +830,14 @@ export function analyzeLocally(rawText: string, forcedLang?: string): AnalysisRe
     hindiWarning = 'सुरक्षित: कोई घोटाला या धमकी भरे संकेत नहीं मिले। यह एक सामान्य सूचना प्रतीत होती है।';
   }
 
+  const scamLens = generateScamLens(
+    text,
+    signalBreakdown,
+    riskScore,
+    payment,
+    detectedLang
+  );
+
   return {
     risk_score: riskScore,
     risk_level: riskLevel,
@@ -489,6 +854,7 @@ export function analyzeLocally(rawText: string, forcedLang?: string): AnalysisRe
       english: englishWarning,
       hindi: hindiWarning,
     },
+    scam_lens: scamLens,
     technical_analysis: {
       semantic_score: Math.round(semanticSignalsWeight),
       behavioral_score: Math.round(behavioralWeight),

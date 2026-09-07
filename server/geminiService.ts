@@ -80,9 +80,27 @@ Analyze the given message text and return a JSON object with:
       "is_verification_small_amount": boolean (true if nominal amount like ₹1, ₹2 is used as a verification trap),
       "risk_level": "SAFE"|"LOW"|"MEDIUM"|"HIGH"|"CRITICAL",
       "explanation": string or null
+    },
+12. "scam_lens": {
+      "manipulation_score": integer 0-100 (measures how strongly the message pressures, deceives, or emotionally influences the victim),
+      "attack_chain": array of {
+        "stage": one of "AUTHORITY"|"FEAR"|"URGENCY"|"REWARD"|"ISOLATION"|"DECEPTION"|"PAYMENT_PRESSURE"|"CREDENTIAL_PRESSURE"|"TRUST_BUILDING"|"CONSEQUENCE_THREAT"|"REMOTE_ACCESS_REQUEST",
+        "severity": "LOW"|"MEDIUM"|"HIGH"|"CRITICAL",
+        "confidence": float 0.70-1.0,
+        "evidence": short exact quote from message,
+        "explanation": brief explanation of the psychological technique,
+        "why_it_matters": concise why this matters to the victim
+      },
+      "likely_objective": string (cautious wording e.g. "Make you authorize a payment.", "Obtain your OTP or UPI PIN.", "Make you install remote-access software.", "Prevent you from independently verifying the request."),
+      "safest_pause_point": string (e.g. "Stop before making the payment and verify the request through the official electricity provider."),
+      "hindi_explanation": string (Hindi explanation of how the message attempts to manipulate the recipient),
+      "highlights": array of { "text": string (quote), "label": string (e.g. "FEAR / THREAT", "ARTIFICIAL URGENCY", "PAYMENT PRETEXT", "VICTIM ISOLATION"), "stage": string },
+      "status_summary": string (e.g. "UPI-Shield detected a 5-step social-engineering attack.")
     }
 
 Crucial Rules:
+- ScamLens Attack Chain: Only select stages genuinely present in the message. Do NOT force all stages into every result. Order stages by their flow of manipulation.
+- If the message is a legitimate notice (e.g. bill due date without coercion), manipulation_score should be low (<15) and attack_chain should be empty [].
 - Support Hinglish slang & phrases ("turant", "warna", "kat jayega", "paisa bhejo", "account block").
 - Understand that nominal ₹1 or ₹2 verification payments are high-risk pretexts.
 - Understand that asking a user to scan a QR code to RECEIVE money is a high-risk scam.
@@ -189,6 +207,44 @@ Crucial Rules:
             },
             required: ['detected', 'is_verification_small_amount', 'risk_level'],
           },
+          scam_lens: {
+            type: Type.OBJECT,
+            properties: {
+              manipulation_score: { type: Type.INTEGER },
+              attack_chain: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    stage: { type: Type.STRING },
+                    severity: { type: Type.STRING },
+                    confidence: { type: Type.NUMBER },
+                    evidence: { type: Type.STRING },
+                    explanation: { type: Type.STRING },
+                    why_it_matters: { type: Type.STRING },
+                  },
+                  required: ['stage', 'severity', 'confidence', 'evidence', 'explanation'],
+                },
+              },
+              likely_objective: { type: Type.STRING },
+              safest_pause_point: { type: Type.STRING },
+              hindi_explanation: { type: Type.STRING },
+              highlights: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    text: { type: Type.STRING },
+                    label: { type: Type.STRING },
+                    stage: { type: Type.STRING },
+                  },
+                  required: ['text', 'label', 'stage'],
+                },
+              },
+              status_summary: { type: Type.STRING },
+            },
+            required: ['manipulation_score', 'attack_chain', 'likely_objective', 'safest_pause_point'],
+          },
         },
         required: [
           'risk_score',
@@ -288,6 +344,17 @@ Crucial Rules:
         english: parsed.warnings?.english || localFallback.warnings.english,
         hindi: parsed.warnings?.hindi || localFallback.warnings.hindi,
       },
+      scam_lens: parsed.scam_lens && Array.isArray(parsed.scam_lens.attack_chain)
+        ? {
+            manipulation_score: Math.min(100, Math.max(0, Number(parsed.scam_lens.manipulation_score) || (localFallback.scam_lens?.manipulation_score ?? 85))),
+            attack_chain: parsed.scam_lens.attack_chain,
+            likely_objective: parsed.scam_lens.likely_objective || localFallback.scam_lens?.likely_objective || 'Make you authorize a payment.',
+            safest_pause_point: parsed.scam_lens.safest_pause_point || localFallback.scam_lens?.safest_pause_point || 'The safest point to stop is before making the requested payment.',
+            hindi_explanation: parsed.scam_lens.hindi_explanation || localFallback.scam_lens?.hindi_explanation,
+            highlights: parsed.scam_lens.highlights || localFallback.scam_lens?.highlights || [],
+            status_summary: parsed.scam_lens.status_summary || `UPI-Shield detected a ${parsed.scam_lens.attack_chain.length}-step social-engineering attack.`,
+          }
+        : localFallback.scam_lens,
       technical_analysis: {
         semantic_score: Math.round(Number(parsed.risk_score || 80) * 0.6),
         behavioral_score: Math.round(Number(parsed.risk_score || 80) * 0.25),

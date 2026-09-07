@@ -1,14 +1,55 @@
 import { DemoTestCase } from '../types';
 
-export const BUILT_IN_DEMO =
-  'URGENT: Your electricity connection will be disconnected today due to unpaid bill. Call customer care immediately on 98XXXXXX12. To avoid disconnection, complete verification by paying ₹2 through the secure UPI link. Do not delay.';
+export const HACKATHON_DEMO = {
+  id: 'demo-scamlens-signature',
+  title: 'Electricity Disconnection (Signature ScamLens Demo)',
+  text: 'URGENT: Your electricity connection will be disconnected within 30 minutes. Complete a ₹2 verification payment immediately. Do not call customer care.',
+  expectedChain: ['AUTHORITY', 'FEAR', 'URGENCY', 'ISOLATION', 'PAYMENT_PRESSURE'],
+  expectedRisk: 'HIGH' as const,
+  riskScore: 94,
+  manipulationScore: 96,
+  safestPausePoint: 'Stop before making the payment and verify the request through the official electricity provider.',
+};
+
+export const BUILT_IN_DEMO = HACKATHON_DEMO.text;
+
+export const SCAMLENS_DEMOS = [
+  {
+    id: 'scamlens-demo-1',
+    title: 'DEMO 1: Electricity Disconnection',
+    badge: 'Authority → Fear → Urgency → Isolation → Payment',
+    text: 'URGENT: Your electricity connection will be disconnected within 30 minutes. Complete a ₹2 verification payment immediately. Do not call customer care.',
+    chainSummary: 'AUTHORITY → FEAR → URGENCY → ISOLATION → PAYMENT PRESSURE',
+  },
+  {
+    id: 'scamlens-demo-2',
+    title: 'DEMO 2: Fake Refund',
+    badge: 'Trust Building → Deception → Urgency → Payment',
+    text: 'Dear customer, your refund of ₹4,850 for order #98219 is pending approval. To credit directly to your bank account, approve the UPI collect request received on PhonePe / GPay within 15 minutes or click upi://pay?pa=refunds-desk@okicici&pn=RefundDesk&am=1&cu=INR for auto-refund verification.',
+    chainSummary: 'TRUST BUILDING → DECEPTION → URGENCY → PAYMENT PRESSURE',
+  },
+  {
+    id: 'scamlens-demo-3',
+    title: 'DEMO 3: Fake KYC',
+    badge: 'Authority → Consequence → Urgency → Payment',
+    text: 'Sir aapka bank account KYC expire ho gaya hai. 2 ghante me account permanently block ho jayega. Abhi verification ke liye ₹1 pay karo through UPI link warna fine lagega: upi://pay?pa=sbi.kyc.portal@ybl&pn=SBI_KYC_Verification&am=1&cu=INR',
+    chainSummary: 'AUTHORITY → CONSEQUENCE THREAT → URGENCY → PAYMENT PRESSURE',
+  },
+  {
+    id: 'scamlens-demo-4',
+    title: 'DEMO 4: Remote-Access Scam',
+    badge: 'Authority → Trust → Deception → Remote Access',
+    text: 'Customer support: Install AnyDesk from Play Store and share the 9-digit code with our executive so we can process your refund and fix your wallet.',
+    chainSummary: 'AUTHORITY → TRUST BUILDING → DECEPTION → REMOTE ACCESS REQUEST',
+  },
+];
 
 export const QUICK_DEMOS = [
   {
     id: 'demo-electricity',
     title: 'Electricity Disconnection',
     badge: 'Urgent Threat',
-    text: 'URGENT: Your electricity connection will be disconnected today due to unpaid bill. Call customer care immediately on 98XXXXXX12. To avoid disconnection, complete verification by paying ₹2 through the secure UPI link. Do not delay.',
+    text: HACKATHON_DEMO.text,
   },
   {
     id: 'demo-refund',
